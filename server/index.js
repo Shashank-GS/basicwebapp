@@ -1,5 +1,5 @@
 const express = require('express')
-const bodyParser = require('body-parser'); 
+const bodyParser = require('body-parser');   
 const cors= require('cors');
 
 const app = express();
@@ -12,6 +12,16 @@ const posts = require('./routes/api/posts');
 
 app.use('/api/posts', posts);  
 
-const port = process.env.PORT || 5000; 
+//  handlee Production 
+if(process.env.NODE_ENV === 'production'){
+    //  Static Folder 
+    app.use(express.static(__dirname + '/public/')); 
+
+
+    // handle SPA 
+    app.get(/.*/,(req, res)=> res.sendFile(__dirname +  '/public/index.html'));  
+
+}
+const port = process.env.PORT || 5000;     
 
 app.listen(port, ()=> console.log(`server Started successfully on port ${port}`)); 
